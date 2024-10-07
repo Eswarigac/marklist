@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Marks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('bg1.png');
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 20px;
+            color: white;
+            overflow-x: hidden;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 10%;
+            font-size: 2.5em;
+            color: #fff; 
+        }
+        .container {
+            max-width: 640px;
+            margin: 0 auto; 
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: right; 
+            border: 1px solid #ddd;
+            word-wrap: break-word; 
+        }
+        th {
+            background-color: rgb(7, 56, 75);
+            color: white;
+            font-weight: bold;
+        }
+        td{
+            text-align: center;
+        }
+        input {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 150px; 
+            box-sizing: border-box; 
+        }
+        button {
+            background-color: rgb(7, 56, 75);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            margin-top: 10px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 200px;
+            display: block; 
+        }
+        button:hover {
+            background-color:rgb(7, 56, 75);
+        }
+        .input-container {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .low-mark {
+            background-color: #f44336; 
+        }
+        .high-mark {
+            background-color: #4978f9; 
+        }
+        tr{
+            background-color:rgb(7, 56, 75);
+        }
+        .remove-btn{
+            padding: 5px;
+            margin-top: 2px;
+        }
+        @media (max-width: 695px) {
+            table{
+                margin-left: -20px;
+                width: 100%;
+            }
+            .container{
+                max-width: 800px;
+                margin: 0px;
+            }
+        }
+        @media (max-width: 660px) {
+            
+            .container{
+                width: 440px;
+                margin-left: -15px;
+            }
+            th{
+                padding: 5px;
+                padding-left: 0px;
+            }
+        }
+        /* @media (max-width: 640px) {
+            th, td {
+                text-align: left; 
+            }
+            th {
+                display: none; 
+            }
+            tr {
+                display: block; 
+                margin-bottom: 15px; 
+            }
+            td {
+                display: flex;
+                justify-content: space-between; 
+                padding: 10px; 
+                position: relative; 
+                padding-left: 50%; 
+                border: none; 
+            }
+            td::before {
+                content: attr(data-label); 
+                position: absolute;
+                left: 0;
+                width: 50%; 
+                padding-left: 10px; 
+                font-weight: bold; 
+                text-align: left; 
+            }
+        }
+        @media (max-width: 320px) {
+            h1 {
+                font-size: 20px; 
+            }
+            input {
+                width: 100%; 
+            }
+            button {
+                width: 90%; 
+            }
+        } */
+    </style>
+</head>
+<body>
+    <script>
+        const stu = document.createElement("h1");
+        stu.innerHTML = "Student Marks";
+        document.body.appendChild(stu);
+        
+        const container = document.createElement("div");
+        container.className = "container";
+        document.body.appendChild(container);
+        
+        const table = document.createElement("table");
+        table.innerHTML = `
+            <thead>
+                <tr>
+                    <th>s.no</th>
+                    <th>name</th>
+                    <th>mark1</th>
+                    <th>mark2</th>
+                    <th>mark3</th>
+                    <th>mark4</th>
+                    <th>mark5</th>
+                    <th>total</th>
+                    <th>action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        `;
+        container.appendChild(table);
+        
+        const form = document.createElement("form");
+        const inputContainer = document.createElement("div");
+        inputContainer.className = "input-container";
+        inputContainer.innerHTML = `
+            <input type="text" id="input1" placeholder="Name" required>
+            <input type="number" max="100" id="input2" placeholder="Mark 1" required>
+            <input type="number" max="100" id="input3" placeholder="Mark 2" required>
+            <input type="number" max="100" id="input4" placeholder="Mark 3" required>
+            <input type="number" max="100" id="input5" placeholder="Mark 4" required>
+            <input type="number" max="100" id="input6" placeholder="Mark 5" required>
+        `;
+        
+        form.appendChild(inputContainer);
+        
+        const btn = document.createElement("button");
+        btn.innerHTML = "Add Student";
+        form.appendChild(btn);
+        container.appendChild(form);
+        
+        let sNo = 1; 
+
+        form.addEventListener("submit", (event) => {
+            event.preventDefault(); // Prevent the default form submission
+            const name = document.getElementById("input1").value.trim();
+            const marks = [
+                parseFloat(document.getElementById("input2").value) || 0,
+                parseFloat(document.getElementById("input3").value) || 0,
+                parseFloat(document.getElementById("input4").value) || 0,
+                parseFloat(document.getElementById("input5").value) || 0,
+                parseFloat(document.getElementById("input6").value) || 0
+            ];
+
+            // Validate input fields
+            if (!name || marks.some(mark => isNaN(mark))) {
+                alert("Please fill in all fields with valid values.");
+                return;
+            }
+            
+            const total = marks.reduce((acc, mark) => acc + mark, 0);
+    
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${sNo++}</td>
+                <td>${name}</td>
+                <td>${marks[0]}</td>
+                <td>${marks[1]}</td>
+                <td>${marks[2]}</td>
+                <td>${marks[3]}</td>
+                <td>${marks[4]}</td>
+                <td>${total}</td>
+                <td><button class="remove-btn" style="background-color: #f44336;">Remove</button></td>
+            `;
+            table.querySelector('tbody').appendChild(row);
+
+            marks.forEach((mark, index) => {
+                const cell = row.children[index + 2];
+
+                if (mark < 35) {
+                    cell.classList.add('low-mark');
+                }
+                else if (mark < 101) {
+                    cell.classList.add('high-mark');
+                }
+                else {
+                    alert("This field is invalid");
+                    cell.reset();
+                }
+                
+                cell.setAttribute('data-label', `Mark ${index + 1}`);
+            });
+
+            const removeBtn = row.querySelector(".remove-btn");
+            removeBtn.addEventListener("click", () => {
+                table.querySelector('tbody').removeChild(row);
+            });
+
+            // Clear input fields after adding
+            form.reset();
+        });
+    </script>
+</body>
+</html>
